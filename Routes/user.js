@@ -7,6 +7,7 @@ const User = require('../Models/user');
 //signup
 router.post('/signup', async (req, res, next) => {
     try {
+        console.log('hi')
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
             firstname: req.body.firstname,
@@ -28,43 +29,38 @@ router.post('/signup', async (req, res, next) => {
 }
 );
 
-
-
 //login
 router.post('/signin', async (req, res, next) => {
-    try{
+    try {
         const { firstname, password } = req.body;
-        
+        console.log(firstname, password )
         const user = await User.findOne({ firstname: firstname });
-
-        if (!user) {
+        
+        if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({
-                message: 'Auth failed'
+                message: 'Authentication failed'
             });
         }
-
-        const result = await bcrypt.compare(password, user.password);
-        if (!result) {
-            return res.status(401).json({
-                message: 'Auth failed'
-            });
-        }
-
+        
+        console.log("jwt secret key: ",process.env.JWT_KEY )
+      
         const token = jwt.sign(
-            { firstname: user.firstname, userId: user._id, email: user.email }, process.env.JWT_KEY, { expiresIn: '1h' }
+            { firstname: user.firstname, userId: user._id,email:user.email },
+            process.env.JWT_KEY, 
+            { expiresIn: '1h' } 
         );
 
+       
         return res.status(200).json({
-            message: 'Auth successful',
+            message: 'Authentication successful',
             token: token
         });
 
     } catch (err) {
-        return res.status(401).json({
-            message: 'Auth failed',
+        return res.status(500).json({
+            message: 'Internal Server Error',
             error: err.message
         });
-
     }
 });
 
