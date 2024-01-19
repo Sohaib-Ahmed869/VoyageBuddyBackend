@@ -14,7 +14,11 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 
-app.use(cors());
+app.use(cors(
+    {
+        origin: 'localhost:3000',
+    }
+));
 app.use(express.json());
 
 const bodyParser = require('body-parser');
@@ -44,5 +48,3 @@ app.listen(
         console.log('Server started on port ' + process.env.PORT);
     }
 );
-
-
