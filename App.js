@@ -8,24 +8,27 @@ const ContactUs = require('./Routes/ContactUs');
 const ChangePassword = require('./Routes/ChangePassword');
 const CodeVerification = require('./Routes/CodeVerification');
 const ForgotPass = require('./Routes/ForgotPassword');
+const Trips = require('./Routes/Trips');
 
 const app = express();
 const cors = require('cors');
-const env = require('dotenv').config();
+require('dotenv').config();
 
 app.use(cors());
+app.use(express.json());
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
-app.use(express.json());
 
 app.use('/user', UserRouter);
 app.use('/user', ContactUs);
 app.use('/user', CodeVerification);
 app.use('/user', ChangePassword);
 app.use('/user', ForgotPass);
+app.use('/trips', Trips);
 
-mongoose.connect('mongodb://127.0.0.1:27017/voyagebuddy')
+mongoose.connect('mongodb://127.0.0.1:27017/VB')
 
     .then(() => {
         console.log('Connected to database');
@@ -38,7 +41,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/voyagebuddy')
 
 app.listen(
     process.env.PORT, () => {
-        console.log('Server started');
+        console.log('Server started on port ' + process.env.PORT);
     }
 );
 
