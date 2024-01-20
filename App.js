@@ -32,7 +32,7 @@ app.use('/user', ChangePassword);
 app.use('/user', ForgotPass);
 app.use('/trips', Trips);
 
-mongoose.connect('mongodb://127.0.0.1:27017/VB')
+mongoose.connect('mongodb+srv://sohaibahmedsipra:nvidia940MX@cluster0.3jtgifa.mongodb.net/')
 
     .then(() => {
         console.log('Connected to database');
