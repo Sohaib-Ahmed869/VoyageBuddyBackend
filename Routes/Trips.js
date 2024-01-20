@@ -23,9 +23,8 @@ router.post('/save-trip', async (req, res) => {
             airports: airports,
 
         });
-        console.log(newTrip);
         await newTrip.save();
-        console.log("new trip saved");
+        return res.status(200).json({'message':"new trip added"});
     }
     catch (error) {
         console.error(error);
